@@ -8,3 +8,4 @@ def handler_types_text(message):
         text = "Четыре силы, некогда хранители гармонии, теперь объединились в жажде власти!\n\nВыберите класс:"
         markup = reply.Plot.introduction_2()
         bot.send_message(chat_id=message.chat.id, text=text, reply_markup=markup)
+        if 

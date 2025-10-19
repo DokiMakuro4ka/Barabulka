@@ -1,7 +1,7 @@
-from bot import bot
+from Bot.bot import bot
 
 # Иницилизируем хендлеры, основной код
-from Handler import call, command, text
+from Bot.Handler import call, command, text
 
 print("----- БОТ ЗАПУЩЕН -----")
 bot.infinity_polling()

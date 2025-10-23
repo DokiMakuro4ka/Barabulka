@@ -43,26 +43,26 @@ def handler_callback_query(call):
         bot.delete_message(chat_id=call.message.chat.id, message_id=call.message.id)
         text = "Ты выбрал класс <Маг>.\n\nИди подойди к Капитану, он введёт тебя в курс дела."
         User.insert_user(user_id=call.from_user.id, class_id=1)
-        markup = reply.Interface.interface_1()
+        markup = reply.Plot.introduction_1()
         bot.send_message(chat_id=call.message.chat.id, text=text, reply_markup=markup)
 
     elif call.data == "select_class_2":
         bot.delete_message(chat_id=call.message.chat.id, message_id=call.message.id)
         text = "Ты выбрал класс <Рыцарь>.\n\nИди подойди к Капитану, он введёт тебя в курс дела."
         User.insert_user(user_id=call.from_user.id, class_id=2)
-        markup = reply.Interface.interface_1()
+        markup = reply.Plot.introduction_1()
         bot.send_message(chat_id=call.message.chat.id, text=text, reply_markup=markup)
 
     elif call.data == "select_class_3":
         bot.delete_message(chat_id=call.message.chat.id, message_id=call.message.id)
         text = "Ты выбрал класс <Лучник>.\n\nИди подойди к Капитану, он введёт тебя в курс дела."
         User.insert_user(user_id=call.from_user.id, class_id=3)
-        markup = reply.Interface.interface_1()
+        markup = reply.Plot.introduction_1()
         bot.send_message(chat_id=call.message.chat.id, text=text, reply_markup=markup)
 
     elif call.data == "select_class_4":
         bot.delete_message(chat_id=call.message.chat.id, message_id=call.message.id)
         text = "Ты выбрал класс <Ассасин>.\n\nИди подойди к Капитану, он введёт тебя в курс дела."
         User.insert_user(user_id=call.from_user.id, class_id=4)
-        markup = reply.Interface.interface_1()
+        markup = reply.Plot.introduction_1()
         bot.send_message(chat_id=call.message.chat.id, text=text, reply_markup=markup)

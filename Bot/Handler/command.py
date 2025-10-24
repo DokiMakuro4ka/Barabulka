@@ -14,5 +14,7 @@ def handler_command_start(message):
         markup = inline.Plot.introduction_lor()
         bot.send_message(chat_id=message.chat.id, text=text, reply_markup=markup)
 
+
     else:
-        bot.send_message(chat_id=message.chat.id, text="Ты уже зарегистрирован")
+        markup = reply.Plot.introduction_1()
+        bot.send_message(chat_id=message.chat.id, text="Ты уже зарегистрирован", reply_markup=markup)

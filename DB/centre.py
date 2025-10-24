@@ -25,6 +25,29 @@ class User:
         insert(query=query)
 
 
+class Clas:
+    def get_clas(clas_id):
+        query = f"""SELECT *
+                    FROM Classes
+                    WHERE ID_class = {clas_id}"""
+        result = select(query=query)
+        return result
+
+
+class Subclass:
+    def get_subclass(subclass_id):
+        query = f"""SELECT *
+                    FROM Subclasses
+                    WHERE ID_subclass = {subclass_id}"""
+        result = select(query=query)
+        return result
+
+
+class Mob:
+    pass
+
+
+
 def select(query):
     try:
         conn = psycopg2.connect(**conn_params)

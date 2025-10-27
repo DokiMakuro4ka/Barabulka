@@ -14,32 +14,65 @@ conn_params = {
 class User:
     def get_user(user_id):
         query = f"""SELECT *
-                    FROM Users
-                    WHERE ID_user = {user_id}"""
-        result = select(query=query)
+                    FROM "Users"
+                    WHERE user_id = {user_id}"""
+        result = select_update(query=query)
         return result
 
+    def set_user_name(user_id, name):
+        query = f"""UPDATE "Users"
+                    SET name = '{name}'
+                    WHERE user_id = {user_id}"""
+        select_update(query=query)
+
+    def set_user_lvl(user_id, lvl):
+        pass
+
+    def set_user_experience_now(user_id, experience_now):
+        pass
+
+    def set_user_experience_future(user_id, experience_future):
+        pass
+
+    def set_user_hp(user_id, hp):
+        pass
+
+    def set_user_damage(user_id, damage):
+        pass
+
+    def set_user_defence(user_id, defence):
+        pass
+
+    def set_user_agility(user_id, agility):
+        pass
+
+    def set_user_star_coin(user_id, star_coin):
+        pass
+
+    def set_user_skill_point(user_id, skill_coin):
+        pass
+
     def insert_user(user_id, class_id):
-        query = f"""INSERT INTO Users (ID_user, lvl, experience_now, experience_future, hp, damage, defence, agility, star_coin, ID_class, ID_subclass)
-                    VALUES ({user_id}, 1, 0, 10, 10, 1, 1, 1, 0, {class_id}, 0)"""
+        query = f"""INSERT INTO "Users" (user_id, name, lvl, experience_now, experience_future, hp, damage, defence, agility, star_coin, skill_point, class_id, subclass_id, state_id)
+                    VALUES ({user_id}, 'f', 1, 0, 10, 10, 1, 1, 1, 0, 0, {class_id}, 0, 0)"""
         insert(query=query)
 
 
-class Clas:
-    def get_clas(clas_id):
+class UserClass:
+    def get_class(class_id):
         query = f"""SELECT *
-                    FROM Classes
-                    WHERE ID_class = {clas_id}"""
-        result = select(query=query)
+                    FROM "Classes"
+                    WHERE class_id = {class_id}"""
+        result = select_update(query=query)
         return result
 
 
-class Subclass:
+class UserSubclass:
     def get_subclass(subclass_id):
         query = f"""SELECT *
-                    FROM Subclasses
-                    WHERE ID_subclass = {subclass_id}"""
-        result = select(query=query)
+                    FROM "Subclasses"
+                    WHERE subclass_id = {subclass_id}"""
+        result = select_update(query=query)
         return result
 
 
@@ -48,7 +81,7 @@ class Mob:
 
 
 
-def select(query):
+def select_update(query):
     try:
         conn = psycopg2.connect(**conn_params)
         cursor = conn.cursor()
@@ -84,3 +117,6 @@ def insert(query):
             cursor.close()
         if connection is not None:
             connection.close()
+
+
+

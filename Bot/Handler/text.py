@@ -1,20 +1,20 @@
 from Bot.bot import bot
 from Bot.Keyboard import inline, reply
-from DB.centre import User, Clas, Subclass
+from DB.centre import User, UserClass, UserSubclass
 
 
 @bot.message_handler(content_types=["text"])
 def handler_message(message):
     if message.text == "👤 Профиль":
         user = User.get_user(message.from_user.id)
-        clas = Clas.get_clas(clas_id=user["id_class"])
-        subclass = Subclass.get_subclass(subclass_id=user["id_subclass"])
+        user_class = UserClass.get_class(class_id=user["class_id"])
+        subclass = UserSubclass.get_subclass(subclass_id=user["subclass_id"])
 
         text = f"""
-        Профиль (id{user["id_user"]})\n
+        Профиль (id{user["user_id"]})\n
         Уровень: {user["lvl"]}
         Опыт: {user["experience_now"]} / {user["experience_future"]}\n
-        Класс: {clas["name"]}
+        Класс: {user_class["name"]}
         Подкласс: {subclass["name"]}\n
         Здоровье: {user["hp"]}
         Урон: {user["damage"]}

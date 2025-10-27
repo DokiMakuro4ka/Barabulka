@@ -26,31 +26,76 @@ class User:
         select_update(query=query)
 
     def set_user_lvl(user_id, lvl):
-        pass
+        query = f"""UPDATE "Users"
+                    SET lvl = '{lvl}'
+                    WHERE user_id = {user_id}"""
+        select_update(query=query)
 
     def set_user_experience_now(user_id, experience_now):
-        pass
+        query = f"""UPDATE "Users"
+                    SET experience_now = '{experience_now}'
+                    WHERE user_id = {user_id}"""
+        select_update(query=query)
 
     def set_user_experience_future(user_id, experience_future):
-        pass
+        query = f"""UPDATE "Users"
+                    SET experience_future = '{experience_future}'
+                    WHERE user_id = {user_id}"""
+        select_update(query=query)
 
     def set_user_hp(user_id, hp):
-        pass
+        query = f"""UPDATE "Users"
+                    SET hp = '{hp}'
+                    WHERE user_id = {user_id}"""
+        select_update(query=query)
 
     def set_user_damage(user_id, damage):
-        pass
+        query = f"""UPDATE "Users"
+                    SET damage = '{damage}'
+                    WHERE user_id = {user_id}"""
+        select_update(query=query)
 
     def set_user_defence(user_id, defence):
-        pass
+        query = f"""UPDATE "Users"
+                    SET defence = '{defence}'
+                    WHERE user_id = {user_id}"""
+        select_update(query=query)
 
     def set_user_agility(user_id, agility):
-        pass
+        query = f"""UPDATE "Users"
+                    SET agility = '{agility}'
+                    WHERE user_id = {user_id}"""
+        select_update(query=query)
 
     def set_user_star_coin(user_id, star_coin):
-        pass
+        query = f"""UPDATE "Users"
+                    SET star_coin = '{star_coin}'
+                    WHERE user_id = {user_id}"""
+        select_update(query=query)
 
     def set_user_skill_point(user_id, skill_coin):
-        pass
+        query = f"""UPDATE "Users"
+                    SET skill_coin = '{skill_coin}'
+                    WHERE user_id = {user_id}"""
+        select_update(query=query)
+
+    def set_user_class_id(user_id, class_id):
+        query = f"""UPDATE "Users"
+                    SET class_id = '{class_id}'
+                    WHERE user_id = {user_id}"""
+        select_update(query=query)
+
+    def set_user_subclass_id(user_id, subclass_id):
+        query = f"""UPDATE "Users"
+                    SET subclass_id = '{subclass_id}'
+                    WHERE user_id = {user_id}"""
+        select_update(query=query)
+
+    def set_user_state_id(user_id, state_id):
+        query = f"""UPDATE "Users"
+                    SET state_id = '{state_id}'
+                    WHERE user_id = {user_id}"""
+        select_update(query=query)
 
     def insert_user(user_id, class_id):
         query = f"""INSERT INTO "Users" (user_id, name, lvl, experience_now, experience_future, hp, damage, defence, agility, star_coin, skill_point, class_id, subclass_id, state_id)

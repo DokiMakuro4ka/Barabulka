@@ -5,7 +5,7 @@ import psycopg2
 conn_params = {
     "dbname": "Barabulka",
     "user": "postgres",
-    "password": "admin",
+    "password": "123123",
     "host": "localhost",
     "port": "5432"
 }

@@ -74,7 +74,7 @@ def handler_callback_query(call):
         bot.delete_message(chat_id=call.message.chat.id, message_id=call.message.id)
         user = User.get_user(user_id=call.from_user.id)
         user_class = UserClass.get_class(class_id=user["class_id"])
-        text = f"Тут должно быть описание класса {user_class["name"]}"
+        text = f"""Тут должно быть описание класса {user_class["name"]}"""
         markup = inline.Profile.profile_class()
         bot.send_message(chat_id=call.message.chat.id, text=text, reply_markup=markup)
 

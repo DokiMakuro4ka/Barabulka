@@ -16,90 +16,90 @@ class User:
         query = f"""SELECT *
                     FROM "Users"
                     WHERE user_id = {user_id}"""
-        result = select_update(query=query)
+        result = select(query=query)
         return result
 
     def set_user_name(user_id, name):
         query = f"""UPDATE "Users"
                     SET name = '{name}'
                     WHERE user_id = {user_id}"""
-        select_update(query=query)
+        update(query=query)
 
     def set_user_lvl(user_id, lvl):
         query = f"""UPDATE "Users"
                     SET lvl = '{lvl}'
                     WHERE user_id = {user_id}"""
-        select_update(query=query)
+        update(query=query)
 
     def set_user_experience_now(user_id, experience_now):
         query = f"""UPDATE "Users"
                     SET experience_now = '{experience_now}'
                     WHERE user_id = {user_id}"""
-        select_update(query=query)
+        update(query=query)
 
     def set_user_experience_future(user_id, experience_future):
         query = f"""UPDATE "Users"
                     SET experience_future = '{experience_future}'
                     WHERE user_id = {user_id}"""
-        select_update(query=query)
+        update(query=query)
 
     def set_user_hp(user_id, hp):
         query = f"""UPDATE "Users"
                     SET hp = '{hp}'
                     WHERE user_id = {user_id}"""
-        select_update(query=query)
+        update(query=query)
 
     def set_user_damage(user_id, damage):
         query = f"""UPDATE "Users"
                     SET damage = '{damage}'
                     WHERE user_id = {user_id}"""
-        select_update(query=query)
+        update(query=query)
 
     def set_user_defence(user_id, defence):
         query = f"""UPDATE "Users"
                     SET defence = '{defence}'
                     WHERE user_id = {user_id}"""
-        select_update(query=query)
+        update(query=query)
 
     def set_user_agility(user_id, agility):
         query = f"""UPDATE "Users"
                     SET agility = '{agility}'
                     WHERE user_id = {user_id}"""
-        select_update(query=query)
+        update(query=query)
 
     def set_user_star_coin(user_id, star_coin):
         query = f"""UPDATE "Users"
                     SET star_coin = '{star_coin}'
                     WHERE user_id = {user_id}"""
-        select_update(query=query)
+        update(query=query)
 
     def set_user_skill_point(user_id, skill_coin):
         query = f"""UPDATE "Users"
                     SET skill_coin = '{skill_coin}'
                     WHERE user_id = {user_id}"""
-        select_update(query=query)
+        update(query=query)
 
     def set_user_class_id(user_id, class_id):
         query = f"""UPDATE "Users"
-                    SET class_id = '{class_id}'
-                    WHERE user_id = {user_id}"""
-        select_update(query=query)
+                    SET class_id = {class_id}
+                    WHERE user_id = {user_id};"""
+        update(query=query)
 
     def set_user_subclass_id(user_id, subclass_id):
         query = f"""UPDATE "Users"
                     SET subclass_id = '{subclass_id}'
                     WHERE user_id = {user_id}"""
-        select_update(query=query)
+        update(query=query)
 
     def set_user_state_id(user_id, state_id):
         query = f"""UPDATE "Users"
                     SET state_id = '{state_id}'
                     WHERE user_id = {user_id}"""
-        select_update(query=query)
+        update(query=query)
 
-    def insert_user(user_id, class_id):
+    def insert_user(user_id, state_id):
         query = f"""INSERT INTO "Users" (user_id, name, lvl, experience_now, experience_future, hp, damage, defence, agility, star_coin, skill_point, class_id, subclass_id, state_id)
-                    VALUES ({user_id}, 'f', 1, 0, 10, 10, 1, 1, 1, 0, 0, {class_id}, 0, 0)"""
+                    VALUES ({user_id}, '0', 1, 0, 10, 10, 1, 1, 1, 0, 0, 0, 0, {state_id})"""
         insert(query=query)
 
 
@@ -108,7 +108,7 @@ class UserClass:
         query = f"""SELECT *
                     FROM "Classes"
                     WHERE class_id = {class_id}"""
-        result = select_update(query=query)
+        result = select(query=query)
         return result
 
 
@@ -117,8 +117,18 @@ class UserSubclass:
         query = f"""SELECT *
                     FROM "Subclasses"
                     WHERE subclass_id = {subclass_id}"""
-        result = select_update(query=query)
+        result = select(query=query)
         return result
+
+
+class UserState:
+    def get_state(state_id):
+        query = f"""SELECT *
+                    FROM "States"
+                    WHERE state_id = {state_id}"""
+        result = select(query=query)
+        return result
+
 
 
 class Mob:
@@ -126,10 +136,10 @@ class Mob:
 
 
 
-def select_update(query):
+def select(query):
     try:
-        conn = psycopg2.connect(**conn_params)
-        cursor = conn.cursor()
+        connection = psycopg2.connect(**conn_params)
+        cursor = connection.cursor()
         cursor.execute(query)
         rows = cursor.fetchall()
         columns = [description[0] for description in cursor.description]
@@ -144,8 +154,24 @@ def select_update(query):
     finally:
         if cursor is not None:
             cursor.close()
-        if conn is not None:
-            conn.close()
+        if connection is not None:
+            connection.close()
+
+def update(query):
+    try:
+        connection = psycopg2.connect(**conn_params)
+        cursor = connection.cursor()
+        cursor.execute(query)
+        connection.commit()
+
+    except Exception as error:
+        print(f"Ошибка: {error}")
+
+    finally:
+        if cursor is not None:
+            cursor.close()
+        if connection is not None:
+            connection.close()
 
 def insert(query):
     try:

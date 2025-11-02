@@ -1,4 +1,4 @@
-from telebot.types import ReplyKeyboardMarkup, KeyboardButton
+from telebot.types import ReplyKeyboardMarkup, KeyboardButton, ReplyKeyboardRemove
 
 
 class Plot:
@@ -8,3 +8,7 @@ class Plot:
         button_2 = KeyboardButton(text="👨 Капитан")
         markup.row(button_1, button_2)
         return markup
+
+def clear():
+    markup = ReplyKeyboardRemove(selective=False)
+    return markup

@@ -5,8 +5,6 @@ from DB.centre import User
 
 @bot.message_handler(commands=["start"])
 def handler_command_start(message):
-    bot.delete_message(chat_id=message.chat.id, message_id=message.id)
-
     user = User.get_user(message.from_user.id)
 
     if user is None:

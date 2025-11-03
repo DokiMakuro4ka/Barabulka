@@ -35,10 +35,18 @@ def handler_callback_query(call):
 
     elif call.data == "state_selection_4":
         bot.delete_message(chat_id=call.message.chat.id, message_id=call.message.id)
-        text = "Описание <Государства 4>, лор этой страны. Плюсы и минусы"
+        photo_path = "C:\IT\Barabulka\Picture\kingdom_dwarves.png"
+        state = UserState.get_state(state_id=4)
+        text = f"{state["description"]}\n\n" \
+               f"Бафы, плюсы:\n" \
+               f"- 1 - Плюс 5% к здоровью\n" \
+               f"- 2 - Урон по ассасинам на 5% больше.\n\n" \
+               f"Дебафы, минусы:\n" \
+               f"- 1 - Передвижение между локациями на 20% больше;\n" \
+               f"- 2 - Урон по магам на 10% меньше."
         markup = inline.Plot.introduction_state_description_4()
-        bot.send_message(chat_id=call.message.chat.id, text=text, reply_markup=markup)
-
+        with open(photo_path, 'rb') as photo_file:
+            bot.send_photo(chat_id=call.message.chat.id, photo=photo_file, caption=text, reply_markup=markup)
 
 
     elif call.data == "select_state_1":
@@ -77,54 +85,54 @@ def handler_callback_query(call):
         markup = inline.Plot.introduction_class_selection()
         bot.send_message(chat_id=call.message.chat.id, text=text, reply_markup=markup)
 
-    elif call.data == "class_selection_mage":
+    elif call.data == "class_selection_1":
         bot.delete_message(chat_id=call.message.chat.id, message_id=call.message.id)
         text = "Описание класса <Маг>.\n\nТут должен быть тект про описание класса и маленькая часть лора этого персонажа."
-        markup = inline.Plot.introduction_class_description_mage()
+        markup = inline.Plot.introduction_class_description_1()
         bot.send_message(chat_id=call.message.chat.id, text=text, reply_markup=markup)
 
-    elif call.data == "class_selection_knight":
+    elif call.data == "class_selection_2":
         bot.delete_message(chat_id=call.message.chat.id, message_id=call.message.id)
         text = "Описание класса <Рыцарь>.\n\nТут должен быть тект про описание класса и маленькая часть лора этого персонажа."
-        markup = inline.Plot.introduction_class_description_knight()
+        markup = inline.Plot.introduction_class_description_2()
         bot.send_message(chat_id=call.message.chat.id, text=text, reply_markup=markup)
 
-    elif call.data == "class_selection_archer":
+    elif call.data == "class_selection_3":
         bot.delete_message(chat_id=call.message.chat.id, message_id=call.message.id)
         text = f"Описание класса <Лучник>.\n\nТут должен быть тект про описание класса и маленькая часть лора этого персонажа."""
-        markup = inline.Plot.introduction_class_description_archer()
+        markup = inline.Plot.introduction_class_description_3()
         bot.send_message(chat_id=call.message.chat.id, text=text, reply_markup=markup)
 
-    elif call.data == "class_selection_assassin":
+    elif call.data == "class_selection_4":
         bot.delete_message(chat_id=call.message.chat.id, message_id=call.message.id)
         text = f"Описание класса <Ассасин>.\n\nТут должен быть тект про описание класса и маленькая часть лора этого персонажа."
-        markup = inline.Plot.introduction_class_description_assassin()
+        markup = inline.Plot.introduction_class_description_4()
         bot.send_message(chat_id=call.message.chat.id, text=text, reply_markup=markup)
 
 
 
-    elif call.data == "select_class_mage":
+    elif call.data == "select_class_1":
         bot.delete_message(chat_id=call.message.chat.id, message_id=call.message.id)
         text = f"Ты выбрал класс <Маг>."
         User.set_user_class_id(user_id=call.from_user.id, class_id=1)
         markup = reply.Plot.introduction_1()
         bot.send_message(chat_id=call.message.chat.id, text=text, reply_markup=markup)
 
-    elif call.data == "select_class_knight":
+    elif call.data == "select_class_2":
         bot.delete_message(chat_id=call.message.chat.id, message_id=call.message.id)
         text = f"Ты выбрал класс <Рыцарь>."
         User.set_user_class_id(user_id=call.from_user.id, class_id=2)
         markup = reply.Plot.introduction_1()
         bot.send_message(chat_id=call.message.chat.id, text=text, reply_markup=markup)
 
-    elif call.data == "select_class_archer":
+    elif call.data == "select_class_3":
         bot.delete_message(chat_id=call.message.chat.id, message_id=call.message.id)
         text = f"Ты выбрал класс <Лучник>."
         User.set_user_class_id(user_id=call.from_user.id, class_id=3)
         markup = reply.Plot.introduction_1()
         bot.send_message(chat_id=call.message.chat.id, text=text, reply_markup=markup)
 
-    elif call.data == "select_class_assassin":
+    elif call.data == "select_class_4":
         bot.delete_message(chat_id=call.message.chat.id, message_id=call.message.id)
         text = f"Ты выбрал класс <Ассасин>."
         User.set_user_class_id(user_id=call.from_user.id, class_id=4)

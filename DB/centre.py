@@ -73,9 +73,9 @@ class User:
                     WHERE user_id = {user_id}"""
         update(query=query)
 
-    def set_user_skill_point(user_id, skill_coin):
+    def set_user_skill_point(user_id, skill_point):
         query = f"""UPDATE "Users"
-                    SET skill_coin = '{skill_coin}'
+                    SET skill_coin = '{skill_point}'
                     WHERE user_id = {user_id}"""
         update(query=query)
 

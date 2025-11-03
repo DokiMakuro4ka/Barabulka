@@ -11,7 +11,7 @@ def handler_callback_query(call):
 
     if call.data == "state_selection":
         bot.delete_message(chat_id=call.message.chat.id, message_id=call.message.id)
-        text = "Четыре силы, некогда хранители гармонии, теперь ведут войны между собой в жажде власти!\n\nВыберите Государство:"
+        text = "Четыре силы, некогда хранители гармонии. Теперь ведут войны между собой в жажде власти!\n\nВыберите Государство:"
         markup = inline.Plot.introduction_state_selection()
         bot.send_message(chat_id=call.message.chat.id, text=text, reply_markup=markup)
 

@@ -1,6 +1,6 @@
 from Bot.bot import bot
 from Bot.Keyboard import inline, reply
-from DB.centre import User, UserClass, UserSubclass, UserState
+from DB.centre import User, UserClass, UserSubclass, UserState, State
 
 
 
@@ -17,19 +17,40 @@ def handler_callback_query(call):
 
     elif call.data == "state_selection_1":
         bot.delete_message(chat_id=call.message.chat.id, message_id=call.message.id)
-        text = "Описание <Государства 1>, лор этой страны. Плюсы и минусы"
+        state = UserState.get_state(state_id=1)
+        text = f"{state["description"]}\n\n" \
+               f"Бафы, плюсы:\n" \
+               f"- 1 - \n" \
+               f"- 2 - \n\n" \
+               f"Дебафы, минусы:\n" \
+               f"- 1 - \n" \
+               f"- 2 - "
         markup = inline.Plot.introduction_state_description_1()
         bot.send_message(chat_id=call.message.chat.id, text=text, reply_markup=markup)
 
     elif call.data == "state_selection_2":
         bot.delete_message(chat_id=call.message.chat.id, message_id=call.message.id)
-        text = "Описание <Государства 2>, лор этой страны. Плюсы и минусы"
+        state = UserState.get_state(state_id=2)
+        text = f"{state["description"]}\n\n" \
+               f"Бафы, плюсы:\n" \
+               f"- 1 - \n" \
+               f"- 2 - \n\n" \
+               f"Дебафы, минусы:\n" \
+               f"- 1 - \n" \
+               f"- 2 - "
         markup = inline.Plot.introduction_state_description_2()
         bot.send_message(chat_id=call.message.chat.id, text=text, reply_markup=markup)
 
     elif call.data == "state_selection_3":
         bot.delete_message(chat_id=call.message.chat.id, message_id=call.message.id)
-        text = "Описание <Государства 3>, лор этой страны. Плюсы и минусы"
+        state = UserState.get_state(state_id=3)
+        text = f"{state["description"]}\n\n" \
+               f"Бафы, плюсы:\n" \
+               f"- 1 - \n" \
+               f"- 2 - \n\n" \
+               f"Дебафы, минусы:\n" \
+               f"- 1 - \n" \
+               f"- 2 - "
         markup = inline.Plot.introduction_state_description_3()
         bot.send_message(chat_id=call.message.chat.id, text=text, reply_markup=markup)
 
@@ -40,10 +61,10 @@ def handler_callback_query(call):
         text = f"{state["description"]}\n\n" \
                f"Бафы, плюсы:\n" \
                f"- 1 - Плюс 5% к здоровью\n" \
-               f"- 2 - Урон по ассасинам на 5% больше.\n\n" \
+               f"- 2 - Урон по ассасинам на 5% больше\n\n" \
                f"Дебафы, минусы:\n" \
-               f"- 1 - Передвижение между локациями на 20% больше;\n" \
-               f"- 2 - Урон по магам на 10% меньше."
+               f"- 1 - Передвижение между локациями на 20% больше\n" \
+               f"- 2 - Урон по магам на 10% меньше"
         markup = inline.Plot.introduction_state_description_4()
         with open(photo_path, 'rb') as photo_file:
             bot.send_photo(chat_id=call.message.chat.id, photo=photo_file, caption=text, reply_markup=markup)
@@ -72,7 +93,8 @@ def handler_callback_query(call):
 
     elif call.data == "select_state_4":
         bot.delete_message(chat_id=call.message.chat.id, message_id=call.message.id)
-        text = f"Вы выбрали государство <Государство 4>."
+        state = State.get_state(state_id=4)
+        text = f"Вы выбрали государство: {state["name"]}. Подойдите к капитану он введет в курс дела."
         User.insert_user(user_id=call.from_user.id, state_id=4)
         markup = reply.Plot.introduction_1()
         bot.send_message(chat_id=call.message.chat.id, text=text, reply_markup=markup)
@@ -165,49 +187,9 @@ def handler_callback_query(call):
     elif call.data == "profile_skills":
         bot.send_message(chat_id=call.message.chat.id, text="В разработке")
 
-    elif call.data == "profile_class_back":
+    elif call.data == "profile_class_back" or call.data == "profile_subclass_back":
         bot.delete_message(chat_id=call.message.chat.id, message_id=call.message.id)
-        user = User.get_user(call.from_user.id)
-        user_class = UserClass.get_class(class_id=user["class_id"])
-        user_subclass = UserSubclass.get_subclass(subclass_id=user["subclass_id"])
-        user_state = UserState.get_state(state_id=user["state_id"])
-        text = f"""
-        Профиль (id{user["user_id"]})
-        Имя: {user["name"]}
-        Государство: {user_state["name"]}\n
-        Уровень: {user["lvl"]}
-        Опыт: {user["experience_now"]} / {user["experience_future"]}\n
-        Класс: {user_class["name"]}
-        Подкласс: {user_subclass["name"]}\n
-        Здоровье: {user["hp"]}
-        Урон: {user["damage"]}
-        Защита: {user["defence"]}
-        Ловкость: {user["agility"]}
-        Очки навыков: {user["skill_point"]}
-        Star Коины: {user["star_coin"]}"""
-        markup = inline.Profile.profile_1()
-        bot.send_message(chat_id=call.message.chat.id, text=text, reply_markup=markup)
-
-    elif call.data == "profile_subclass_back":
-        bot.delete_message(chat_id=call.message.chat.id, message_id=call.message.id)
-        user = User.get_user(call.from_user.id)
-        user_class = UserClass.get_class(class_id=user["class_id"])
-        user_subclass = UserSubclass.get_subclass(subclass_id=user["subclass_id"])
-        user_state = UserState.get_state(state_id=user["state_id"])
-        text = f"""
-        Профиль (id{user["user_id"]})
-        Имя: {user["name"]}
-        Государство: {user_state["name"]}\n
-        Уровень: {user["lvl"]}
-        Опыт: {user["experience_now"]} / {user["experience_future"]}\n
-        Класс: {user_class["name"]}
-        Подкласс: {user_subclass["name"]}\n
-        Здоровье: {user["hp"]}
-        Урон: {user["damage"]}
-        Защита: {user["defence"]}
-        Ловкость: {user["agility"]}
-        Очки навыков: {user["skill_point"]}
-        Star Коины: {user["star_coin"]}"""
+        text = User.get_user_text(user_id=call.from_user.id)
         markup = inline.Profile.profile_1()
         bot.send_message(chat_id=call.message.chat.id, text=text, reply_markup=markup)
 

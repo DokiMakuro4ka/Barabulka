@@ -19,6 +19,29 @@ class User:
         result = select(query=query)
         return result
 
+    def get_user_text(user_id):
+        query = f"""SELECT *
+                    FROM "Users"
+                    WHERE user_id = {user_id}"""
+        user = select(query=query)
+        user_class = UserClass.get_class(class_id=user["class_id"])
+        user_subclass = UserSubclass.get_subclass(subclass_id=user["subclass_id"])
+        user_state = UserState.get_state(state_id=user["state_id"])
+        text = f"Профиль (id{user["user_id"]})\n" \
+               f"Имя: {user["name"]}\n" \
+               f"Государство: {user_state["name"]}\n\n" \
+               f"Уровень: {user["lvl"]}\n" \
+               f"Опыт: {user["experience_now"]} / {user["experience_future"]}\n\n" \
+               f"Класс: {user_class["name"]}\n" \
+               f"Подкласс: {user_subclass["name"]}\n\n" \
+               f"Здоровье: {user["hp"]}\n" \
+               f"Урон: {user["damage"]}\n" \
+               f"Защита: {user["defence"]}\n" \
+               f"Ловкость: {user["agility"]}\n" \
+               f"Очки навыков: {user["skill_point"]}\n" \
+               f"Star Коины: {user["star_coin"]}"
+        return text
+
     def set_user_name(user_id, name):
         query = f"""UPDATE "Users"
                     SET name = '{name}'
@@ -73,9 +96,9 @@ class User:
                     WHERE user_id = {user_id}"""
         update(query=query)
 
-    def set_user_skill_point(user_id, skill_coin):
+    def set_user_skill_point(user_id, skill_point):
         query = f"""UPDATE "Users"
-                    SET skill_coin = '{skill_coin}'
+                    SET skill_coin = '{skill_point}'
                     WHERE user_id = {user_id}"""
         update(query=query)
 
@@ -122,6 +145,15 @@ class UserSubclass:
 
 
 class UserState:
+    def get_state(state_id):
+        query = f"""SELECT *
+                    FROM "States"
+                    WHERE state_id = {state_id}"""
+        result = select(query=query)
+        return result
+
+
+class State:
     def get_state(state_id):
         query = f"""SELECT *
                     FROM "States"

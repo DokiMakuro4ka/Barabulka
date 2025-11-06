@@ -175,7 +175,7 @@ def update(query):
 
 def insert(query):
     try:
-        connection = psycopg2.connect(database="Barabulka", user="postgres", password="admin", host="localhost", port="5432")
+        connection = psycopg2.connect(database="Barabulka", user="postgres", password="123123", host="localhost", port="5432")
         cursor = connection.cursor()
         cursor.execute(query=query)
         connection.commit()

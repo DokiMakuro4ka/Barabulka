@@ -11,7 +11,7 @@ class Plot:
 
     def introduction_state_selection():
         markup = InlineKeyboardMarkup()
-        button_1 = InlineKeyboardButton(text="Государство 1", callback_data="state_selection_1")
+        button_1 = InlineKeyboardButton(text="Айкацу", callback_data="state_selection_aikatsu")
         button_2 = InlineKeyboardButton(text="Государство 2", callback_data="state_selection_2")
         button_3 = InlineKeyboardButton(text="Государство 3", callback_data="state_selection_3")
         button_4 = InlineKeyboardButton(text="Государство 4", callback_data="state_selection_4")
@@ -21,12 +21,57 @@ class Plot:
         markup.row(button_4)
         return markup
 
-    def introduction_state_description_1():
+    ########################## ГОСУДАРСТВА АЙКАТСУ ##########################
+    # Кнопки государства айкатсу
+    def introduction_state_aikatsu():
         markup = InlineKeyboardMarkup()
-        button_1 = InlineKeyboardButton(text="Выбрать государство", callback_data="select_state_1")
+        button_1 = InlineKeyboardButton(text="Выбрать государство", callback_data="select_state_aikatsu")
         button_2 = InlineKeyboardButton(text="Назад", callback_data="state_selection")
+        button_3 = InlineKeyboardButton(text="Эпоха Тумана (до объединения)", callback_data="The_Age_of_Fog")
+        button_4 = InlineKeyboardButton(text="Эпоха Объединения (основание Айкацу)", callback_data="The_Era_of_Unification")
+        button_5 = InlineKeyboardButton(text="Эпоха Парящих Врат (нынешнее время)", callback_data="The_Age_of_Floating_Gates")
         markup.row(button_1)
         markup.row(button_2)
+        markup.row(button_3)
+        markup.row(button_4)
+        markup.row(button_5)
+        return markup
+    
+    # кнопки эпохи тумана
+    def introduction_state_aikatsu_The_Age_of_Fog():
+        markup = InlineKeyboardMarkup()
+        button_1 = InlineKeyboardButton(text="Назад", callback_data="state_selection_aikatsu")
+        button_2 = InlineKeyboardButton(text="⚔️ Конфликты", callback_data="conflicts_The_Age_of_Fog")
+        button_3 = InlineKeyboardButton(text="🌫️ Культура", callback_data="Culture_The_Age_of_Fog")
+        markup.row(button_1)
+        markup.row(button_2)
+        markup.row(button_3)
+        return markup
+    
+    # кнопки эпохи объединения
+    def introduction_state_aikatsu_The_Era_of_Unification():
+        markup = InlineKeyboardMarkup()
+        button_1 = InlineKeyboardButton(text="Назад", callback_data="state_selection_aikatsu")
+        button_2 = InlineKeyboardButton(text="📜 Кодекс Воздушного Пути", callback_data="The_Era_of_Unification_The_Code_of_the_Air_Path")
+        button_3 = InlineKeyboardButton(text="🏛️ Небесный Додзё", callback_data="The_Era_of_Unification_The_Celestial_Dojo")
+        button_4 = InlineKeyboardButton(text="🤝 Последствия", callback_data="The_Era_of_Unification_The_Consequences")
+        markup.row(button_1)
+        markup.row(button_2)
+        markup.row(button_3)
+        markup.row(button_4)
+        return markup
+    
+    # кнопки эпохи парящих врат
+    def introduction_state_aikatsu_The_Age_of_Floating_Gates():
+        markup = InlineKeyboardMarkup()
+        button_1 = InlineKeyboardButton(text="Назад", callback_data="state_selection_aikatsu")
+        button_2 = InlineKeyboardButton(text="⚠️ Внешние угрозы", callback_data="The_Age_of_Floating_Gates_External_threats")
+        button_3 = InlineKeyboardButton(text="💥 Внутренний конфликт", callback_data="The_Age_of_Floating_Gates_Internal_conflict")
+        button_4 = InlineKeyboardButton(text="🧩 Политическая напряжённость", callback_data="The_Age_of_Floating_Gates_Political_tension")
+        markup.row(button_1)
+        markup.row(button_2)
+        markup.row(button_3)
+        markup.row(button_4)
         return markup
 
     def introduction_state_description_2():

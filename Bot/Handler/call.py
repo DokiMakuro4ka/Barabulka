@@ -16,35 +16,36 @@ def handler_callback_query(call):
         bot.send_message(chat_id=call.message.chat.id, text=text, reply_markup=markup)
     #+++++++++++++++++++++++++++++++ГОСУДАРСТВО АЙКАЦУ+++++++++++++++++++++++++++++++#
     elif call.data == "state_selection_aikatsu":
-        bot.delete_message(chat_id=call.message.chat.id, message_id=call.message.id)
-        text = "Айкацу — это парящее государство, расположенное на цепи летающих островов, соединённых мостами из ветра и облаков. Его жители — мастера магии воздуха, дисциплины и чести. Культура Айкацу сочетает духовные практики, боевые искусства и строгий кодекс, напоминающий бусидо самураев. Здесь магия — не просто сила, а путь к просветлению"
+        # получаем описание через класс State
+        state = State.get_by_name("Айкацу")   # например, метод ORM
+        text = state.description if state else "Описание не найдено."
+
         markup = inline.Plot.introduction_state_aikatsu()
         bot.send_message(chat_id=call.message.chat.id, text=text, reply_markup=markup)
     
     #- - - - - - - - - - - - -  ЭПОХИ ГОСУДАРСТВА АЙКАЦУ  - - - - - - - - - - - - - -# 
     #--------------------------------ЭПОХА ТУМАНА-------------------------------#
     elif call.data == "The_Age_of_Fog":
-        bot.delete_message(chat_id=call.message.chat.id, message_id=call.message.id)
-        text = "Когда-то Айкацу был разрозненным архипелагом из парящих островов, каждый из которых принадлежал отдельному клану. Эти кланы веками развивали собственные школы магии воздуха, не признавая чужих традиций. Магия была не путём просветления, а оружием — кланы сражались за контроль над потоками ветра, небесными артефактами и стратегическими воздушными маршрутами."
+        epoch = State.get_epoch("Айкацу", "Эпоха Тумана")  # метод для связки
+        text = epoch.description if epoch else "Эпоха не найдена."
+
         markup = inline.Plot.introduction_state_aikatsu_The_Age_of_Fog()
         bot.send_message(chat_id=call.message.chat.id, text=text, reply_markup=markup)
     
     ##------------------------ ПОДРОБНОСТИ ПРО ЭПОХУ ТУМАНА -----------------------##
     # ⚔️ Конфликты в эпоху тумана
     elif call.data == "conflicts_The_Age_of_Fog":
-        bot.delete_message(chat_id=call.message.chat.id, message_id=call.message.id)
-        text = f"Войны за облачные артефакты: древние реликвии, усиливающие магию, становились причиной кровопролитных сражений.\n\n" \
-               f"Потоки ветра: магические каналы между островами — контроль над ними означал власть.\n\n" \
-               f"Изоляция школ: каждая школа магии считала себя единственно верной, что порождало фанатизм и закрытость."
+        detail = State.get_epoch_detail("Эпоха Тумана", "Конфликты")
+        text = detail.content if detail else "Деталь не найдена."
+
         markup = inline.Plot.introduction_state_aikatsu_The_Age_of_Fog()
         bot.send_message(chat_id=call.message.chat.id, text=text, reply_markup=markup)
 
     # 🌫️ Культура в эпоху тумана
     elif call.data == "Culture_The_Age_of_Fog":
-        bot.delete_message(chat_id=call.message.chat.id, message_id=call.message.id)
-        text = f"Магия передавалась по крови и тайным ритуалам.\n\n" \
-               f"Кланы строили храмы на вершинах облаков, недоступные для чужаков.\n\n" \
-               f"Появились легенды о Долине Природы — месте, где все стихии равны, но никто не мог её найти."
+        detail = State.get_epoch_detail("Эпоха Тумана", "Культура")
+        text = detail.content if detail else "Деталь не найдена."
+
         markup = inline.Plot.introduction_state_aikatsu_The_Age_of_Fog()
         bot.send_message(chat_id=call.message.chat.id, text=text, reply_markup=markup)
 
@@ -91,14 +92,40 @@ def handler_callback_query(call):
     #--------------------------------ЭПОХА ПАРЯЩИХ ВРАТ-------------------------------#
     elif call.data == "The_Age_of_Floating_Gates":
         bot.delete_message(chat_id=call.message.chat.id, message_id=call.message.id)
-        text = "Описание <Государства 1>, лор этой страны. Плюсы и минусы"
-        markup = inline.Plot.introduction_state_description_1()
+        text = "Айкацу стал центром воздушной магии. Его мастера уважаемы во всех государствах. Развились воздушные технологии: парящие библиотеки, храмы, мосты из ветра."
+        markup = inline.Plot.introduction_state_aikatsu_The_Age_of_Floating_Gates()
+        bot.send_message(chat_id=call.message.chat.id, text=text, reply_markup=markup)
+    
+    ##------------------------ ПОДРОБНОСТИ ПРО ЭПОХУ ПАРЯЩИХ ВРАТ -----------------------##
+
+    # ⚠️ Внешние угрозы
+    elif call.data == "The_Age_of_Floating_Gates_External_threats":
+        bot.delete_message(chat_id=call.message.chat.id, message_id=call.message.id)
+        text = f"Государства Огня и Земли стремятся проникнуть в Долину Природы, чтобы овладеть её силой. \n\n" \
+               f"Айкацу защищает Долину, считая её священным источником равновесия."
+        markup = inline.Plot.introduction_state_aikatsu_The_Age_of_Floating_Gates()
+        bot.send_message(chat_id=call.message.chat.id, text=text, reply_markup=markup)
+    # 💥 Внутренний конфликт
+    elif call.data == "The_Age_of_Floating_Gates_Internal_conflict":
+        bot.delete_message(chat_id=call.message.chat.id, message_id=call.message.id)
+        text = f"Традиционалисты: верны Кодексу, считают, что магия — путь к просветлению. \n\n" \
+               f"Новаторы: хотят использовать магию для прогресса, создания оружия, изменения Кодекса."
+        markup = inline.Plot.introduction_state_aikatsu_The_Age_of_Floating_Gates()
+        bot.send_message(chat_id=call.message.chat.id, text=text, reply_markup=markup)
+    # 🧩 Политическая напряжённость
+    elif call.data == "The_Age_of_Floating_Gates_Political_tension":
+        bot.delete_message(chat_id=call.message.chat.id, message_id=call.message.id)
+        text = f"Совет Айкацу расколот: часть поддерживает реформы, часть — возвращение к философии Хосэи. \n\n" \
+               f"Появляются тайные школы, нарушающие Кодекс. \n\n" \
+               f"Некоторые маги начинают искать альтернативные пути, включая союз с другими стихиями."
+        markup = inline.Plot.introduction_state_aikatsu_The_Age_of_Floating_Gates()
         bot.send_message(chat_id=call.message.chat.id, text=text, reply_markup=markup)
 
     elif call.data == "state_selection_2":
         bot.delete_message(chat_id=call.message.chat.id, message_id=call.message.id)
         state = UserState.get_state(state_id=2)
-        text = f"{state["description"]}\n\n" \
+        text_state = state["description"]
+        text = f"{text_state} \n\n" \
                f"Бафы, плюсы:\n" \
                f"- 1 - \n" \
                f"- 2 - \n\n" \
@@ -111,7 +138,8 @@ def handler_callback_query(call):
     elif call.data == "state_selection_3":
         bot.delete_message(chat_id=call.message.chat.id, message_id=call.message.id)
         state = UserState.get_state(state_id=3)
-        text = f"{state["description"]}\n\n" \
+        text_state = state["description"]
+        text = f"{text_state}\n\n" \
                f"Бафы, плюсы:\n" \
                f"- 1 - \n" \
                f"- 2 - \n\n" \
@@ -125,7 +153,8 @@ def handler_callback_query(call):
         bot.delete_message(chat_id=call.message.chat.id, message_id=call.message.id)
         photo_path = "C:\IT\Barabulka\Picture\kingdom_dwarves.png"
         state = UserState.get_state(state_id=4)
-        text = f"{state["description"]}\n\n" \
+        text_state = state["description"]
+        text = f"{text_state}\n\n" \
                f"Бафы, плюсы:\n" \
                f"- 1 - Плюс 5% к здоровью\n" \
                f"- 2 - Урон по ассасинам на 5% больше\n\n" \
@@ -161,7 +190,8 @@ def handler_callback_query(call):
     elif call.data == "select_state_4":
         bot.delete_message(chat_id=call.message.chat.id, message_id=call.message.id)
         state = State.get_state(state_id=4)
-        text = f"Вы выбрали государство: {state["name"]}. Подойдите к капитану он введет в курс дела."
+        text_name = state["name"]
+        text = f"Вы выбрали государство: {text_name}. Подойдите к капитану он введет в курс дела."
         User.insert_user(user_id=call.from_user.id, state_id=4)
         markup = reply.Plot.introduction_1()
         bot.send_message(chat_id=call.message.chat.id, text=text, reply_markup=markup)

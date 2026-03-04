@@ -1,10 +1,8 @@
 # Barabulka - AI Bot Project Dependencies
 # Python 3.x
 
-# Telegram Bot Libraries
-telebot==4.12.0
-python-telegram-bot==20.1
-aiogram==3.0.0
+# Telegram Bot Library (правильное имя пакета)
+pyTelegramBotAPI==4.12.0
 
 # AI & LLM
 openai==0.27.8
@@ -21,7 +19,6 @@ Flask-SQLAlchemy==3.0.5
 # HTTP & Async
 requests==2.31.0
 aiohttp==3.8.0
-asyncio==3.4.3
 
 # Data Processing
 pandas==2.0.0

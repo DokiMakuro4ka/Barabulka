@@ -150,10 +150,32 @@ class Profile:
         button_1 = InlineKeyboardButton(text="Класс", callback_data="profile_class")
         button_2 = InlineKeyboardButton(text="Подкласс", callback_data="profile_subclass")
         button_3 = InlineKeyboardButton(text="Навыки", callback_data="profile_skills")
-        button_4 = InlineKeyboardButton(text="Скрыть профиль", callback_data="profile_back")
+        button_4 = InlineKeyboardButton(text="Удалить профиль", callback_data="profile_delete_confirm")
+        button_5 = InlineKeyboardButton(text="Скрыть профиль", callback_data="profile_back")
+
         markup.row(button_1, button_2)
         markup.row(button_3)
         markup.row(button_4)
+        markup.row(button_5)
+        return markup
+
+    def profile_class():
+        markup = InlineKeyboardMarkup()
+        button_1 = InlineKeyboardButton(text="Назад", callback_data="profile_class_back")
+        markup.row(button_1)
+        return markup
+
+    def profile_subclass():
+        markup = InlineKeyboardMarkup()
+        button_1 = InlineKeyboardButton(text="Назад", callback_data="profile_subclass_back")
+        markup.row(button_1)
+        return markup
+
+    def profile_delete_confirm():
+        markup = InlineKeyboardMarkup()
+        button_1 = InlineKeyboardButton(text="Да, удалить", callback_data="profile_delete_yes")
+        button_2 = InlineKeyboardButton(text="Нет", callback_data="profile_delete_no")
+        markup.row(button_1, button_2)
         return markup
 
     def profile_class():

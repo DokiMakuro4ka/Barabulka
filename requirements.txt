@@ -1,3 +1,40 @@
+<<<<<<< HEAD
 pyTelegramBotAPI
 psycopg2-binary
 python-dotenv
+=======
+# Barabulka - AI Bot Project Dependencies
+# Python 3.8+
+
+# Telegram Bot Library
+pyTelegramBotAPI==4.10.0
+
+# AI & LLM
+openai==0.27.8
+
+# Database
+psycopg2-binary==2.9.6
+
+# Web Framework
+flask==2.3.3
+Flask-SQLAlchemy==3.0.5
+SQLAlchemy==2.0.19
+
+# HTTP
+requests==2.31.0
+
+# Data Processing
+pandas==2.0.3
+numpy==1.24.3
+
+# Configuration
+python-dotenv==1.0.0
+
+# Utilities
+python-dateutil==2.8.2
+
+# Development & Testing (optional)
+pytest==7.4.0
+black==23.7.0
+flake8==6.0.0
+>>>>>>> 0cd4618852a5bf6ffcdad40a0e6e75e6fb1dd1af

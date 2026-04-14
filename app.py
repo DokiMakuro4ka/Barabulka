@@ -4,4 +4,4 @@ from Bot.bot import bot
 from Bot.Handler import call, command, text
 
 print("----- БОТ ЗАПУЩЕН -----")
-bot.infinity_polling()
+bot.infinity_polling()  

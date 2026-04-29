@@ -393,12 +393,6 @@ pip install -r requirements.txt
 
 ---
 
-## 📄 Лицензия
-
-Проект лицензирован под [MIT License](LICENSE).
-
----
-
 ## 💬 Связь и поддержка
 
 **Автор:** [@DokiMakuro4ka](https://github.com/DokiMakuro4ka)

@@ -251,6 +251,7 @@ class Plot:
         markup.add(
             InlineKeyboardButton("⚔️ Атаковать", callback_data="battle_attack"),
             InlineKeyboardButton("🛡️ Защищаться", callback_data="battle_defend"),
-            InlineKeyboardButton("🏃 Убежать", callback_data="battle_flee")
+            InlineKeyboardButton("🏃 Убежать", callback_data="battle_flee"),
+            InlineKeyboardButton("📜 История боя", callback_data="battle_log")
         )
         return markup

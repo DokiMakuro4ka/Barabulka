@@ -666,6 +666,8 @@ def callback_handler(call):
         monster = battle["monster"]
         player_hp = battle["player_hp"]
         monster_hp = battle["monster_current_hp"]
+        turn = battle.get("turn", 1)
+        battle_log = battle.get("log", [])
 
         with psycopg2.connect(Config.db_dsn()) as conn:
             with conn.cursor() as cur:
@@ -675,46 +677,67 @@ def callback_handler(call):
 
         action_desc = ""
         monster_desc = ""
+        player_action_log = ""
+        monster_action_log = ""
 
+        # ---- Действие игрока ----
         if action == "attack":
             dmg = max(1, p_dmg - monster["defence"] + random.randint(-3, 5))
             monster_hp -= dmg
             action_desc = f"наносишь {dmg} урона!"
+            player_action_log = f"⚔️ Ты атакуешь → -{dmg} HP у {monster['name']}"
         elif action == "defend":
             action_desc = "защищаешься"
+            player_action_log = f"🛡️ Ты защищаешься (следующий урон монстра снижен)"
         elif action == "flee":
             if random.random() < 0.5:
+                # побег успешен
+                full_log = "\n".join(battle_log + [f"{turn}. 🏃 Ты сбежал с поля боя!"])
                 del ACTIVE_BATTLES[user_id]
-                # Определяем наличие класса
                 user_data = User.get_user(user_id)
                 has_class = bool(user_data[15]) if user_data else False
-                send_and_track_message(chat_id, "Ты сбежал!", reply.Plot.introduction_1(has_class))
+                send_and_track_message(chat_id, f"Ты сбежал!\n\n{full_log}", reply.Plot.introduction_1(has_class))
                 return
             else:
-                action_desc = "убежать не удалось"
+                action_desc = "пытаешься убежать, но не удаётся!"
+                player_action_log = f"🏃 Ты попытался убежать, но не смог"
+        else:
+            return
 
+        # ---- Ход монстра (если жив) ----
         if monster_hp > 0:
             dmg_mod = 0.5 if action == "defend" else 1.0
             m_dmg = max(1, int((monster["damage"] - p_def + random.randint(-2, 3)) * dmg_mod))
             player_hp -= m_dmg
             monster_desc = f"наносит {m_dmg} урона!"
+            monster_action_log = f"💥 {monster['name']} атакует → -{m_dmg} HP у тебя"
         else:
             monster_desc = "повержен!"
+            monster_action_log = f"🏆 {monster['name']} повержен!"
 
-        # Смерть игрока
+        # ---- Добавляем строки лога ----
+        if player_action_log:
+            battle_log.append(f"{turn}. {player_action_log}")
+        if monster_action_log and monster_hp > 0:
+            battle_log.append(f"{turn}. {monster_action_log}")
+        elif monster_hp <= 0:
+            battle_log.append(f"{turn}. {monster_action_log}")
+
+        # ---- Проверка смерти игрока ----
         if player_hp <= 0:
             new_hp = p_max_hp // 2
             with psycopg2.connect(Config.db_dsn()) as conn:
                 with conn.cursor() as cur:
                     cur.execute('UPDATE "Users" SET hp=%s, current_hp=%s WHERE telegram_id=%s', (new_hp, new_hp, user_id))
                     conn.commit()
+            full_log = "\n".join(battle_log + [f"{turn}. 💀 Ты погиб в бою!"])
             del ACTIVE_BATTLES[user_id]
             user_data = User.get_user(user_id)
             has_class = bool(user_data[15]) if user_data else False
-            send_and_track_message(chat_id, "Ты погиб... Воскрес с половиной HP", reply.Plot.introduction_1(has_class))
+            send_and_track_message(chat_id, f"💀 Ты погиб... Воскрес с половиной HP.\n\n{full_log}", reply.Plot.introduction_1(has_class))
             return
 
-        # Победа над монстром
+        # ---- Проверка победы ----
         if monster_hp <= 0:
             exp_gain = monster["exp_reward"]
             coin_gain = monster["coin_reward"]
@@ -735,22 +758,43 @@ def callback_handler(call):
                             cur.execute('UPDATE "Users" SET experience_now=%s, star_coin=star_coin+%s WHERE telegram_id=%s', (new_exp, coin_gain, user_id))
                         conn.commit()
             BattleLog.save_battle(user_id, monster["id"], "win", exp_gain, coin_gain)
+            full_log = "\n".join(battle_log)
             del ACTIVE_BATTLES[user_id]
             user_data = User.get_user(user_id)
             has_class = bool(user_data[15]) if user_data else False
-            send_and_track_message(chat_id, f"🏆 Победа! +{exp_gain} опыта, +{coin_gain} монет", reply.Plot.introduction_1(has_class))
+            send_and_track_message(chat_id, f"🏆 Победа!\n\n{full_log}\n\n+{exp_gain} опыта, +{coin_gain} монет", reply.Plot.introduction_1(has_class))
             return
 
-        # Бой продолжается – обновляем словарь
+        # ---- Обновляем состояние боя ----
         battle["player_hp"] = player_hp
         battle["monster_current_hp"] = monster_hp
+        battle["turn"] = turn + 1
+        battle["log"] = battle_log
         ACTIVE_BATTLES[user_id] = battle
 
+        # Обновляем HP игрока в БД
+        with psycopg2.connect(Config.db_dsn()) as conn:
+            with conn.cursor() as cur:
+                cur.execute('UPDATE "Users" SET hp=%s, current_hp=%s WHERE telegram_id=%s', (player_hp, player_hp, user_id))
+                conn.commit()
+
+        # Берём последние 5 строк лога для краткого отображения
+        recent_log = battle_log[-5:]
+        log_text = "\n".join(recent_log)
         text = (f"⚔️ Бой с {monster['name']} ⚔️\n"
-                f"Ты {action_desc}\nМонстр {monster_desc}\n"
-                f"Твоё HP: {player_hp}\n"
-                f"HP монстра: {monster_hp}/{monster['max_hp']}")
+                f"{log_text}\n\n"
+                f"❤️ Твоё HP: {player_hp}\n"
+                f"❤️ HP монстра: {monster_hp}/{monster['max_hp']}\n\n"
+                f"Что дальше?")
         send_and_track_message(chat_id, text, inline.Plot.battle_keyboard())
+
+    elif data == "battle_log":
+        battle = ACTIVE_BATTLES.get(user_id)
+        if battle and battle.get("log"):
+            full_log = "\n".join(battle["log"])
+            send_and_track_message(chat_id, f"📜 История боя:\n{full_log}", reply_markup=inline.Plot.battle_keyboard())
+        else:
+            send_and_track_message(chat_id, "Лог пуст.", reply_markup=inline.Plot.battle_keyboard())
 
     elif data == "main_menu":
         delete_current_callback_message(call)

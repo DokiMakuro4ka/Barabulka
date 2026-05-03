@@ -8,8 +8,10 @@ class Config:
     DB_HOST = os.getenv('DB_HOST', 'localhost')
     DB_PORT = os.getenv('DB_PORT', '5432')
     DB_USER = os.getenv('DB_USER', 'postgres')
-    DB_PASSWORD = os.getenv('DB_PASSWORD', '123123')
+    DB_PASSWORD = os.getenv('DB_PASSWORD', '')
     DB_NAME = os.getenv('DB_NAME', 'Barabulka')
+    DEBUG = os.getenv("DEBUG", "False").lower() == "true"
+    BOT_USERNAME = os.getenv("BOT_USERNAME", "BarabulkaSuper_bot")
 
     @staticmethod
     def db_dsn():

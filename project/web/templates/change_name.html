@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>Сменить имя персонажа</h1>
+<p>Смена имени стоит <strong>{{ cost }}</strong> монет.</p>
+<form method="post">
+    <div>
+        <label>Новое имя:</label>
+        <input type="text" name="name" maxlength="50" required>
+    </div>
+    <button type="submit">Сменить</button>
+    <a href="{{ url_for('profile') }}">Отмена</a>
+</form>
+{% endblock %}

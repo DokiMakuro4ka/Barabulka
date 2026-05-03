@@ -106,17 +106,17 @@ class User:
                         cls = UserClass.get_class(class_id)
                         if cls:
                             class_name = cls[2]
-                    subclass_name = ""
+                    subclass_line = ""
                     if subclass_id and subclass_id != 0:
                         sub = UserSubclass.get_subclass(subclass_id)
                         if sub:
-                            subclass_name = f"\\n✨ Подкласс: {sub[2]}"
-                    return (f"👤 {name} (уровень {lvl})\\n"
-                            f"📖 Класс: {class_name}{subclass_name}\\n"
-                            f"❤️ {hp}/{max_hp} HP\\n"
-                            f"🔮 {mana}/{max_mana} MP\\n"
-                            f"⚔️ Атака: {dmg}  🛡 Защита: {defence}\\n"
-                            f"✨ Опыт: {exp_now}/{exp_future}\\n"
+                            subclass_line = f"<br>✨ Подкласс: {sub[2]}"
+                    return (f"👤 {name} (уровень {lvl})<br>"
+                            f"📖 Класс: {class_name}{subclass_line}<br>"
+                            f"❤️ {hp}/{max_hp} HP<br>"
+                            f"🔮 {mana}/{max_mana} MP<br>"
+                            f"⚔️ Атака: {dmg}  🛡 Защита: {defence}<br>"
+                            f"✨ Опыт: {exp_now}/{exp_future}<br>"
                             f"💰 Монет: {coins}")
                 return "Профиль не найден"
 

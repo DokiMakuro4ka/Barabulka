@@ -17,7 +17,7 @@ services:
       retries: 5
 
   telegram_bot:
-    build: ./Bot
+    build: ./TG_bot                # путь к папке бота
     container_name: rpg_bot
     restart: always
     depends_on:

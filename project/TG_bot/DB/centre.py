@@ -1,5 +1,5 @@
 import psycopg2
-from config.settings import Config
+from TG_bot.config.settings import Config
 
 def get_connection():
     return psycopg2.connect(Config.db_dsn())

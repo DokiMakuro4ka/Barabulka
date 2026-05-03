@@ -1,0 +1,59 @@
+name: Deploy to VPS
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # Сборка образа веб-приложения
+      - name: Build web image
+        run: |
+          docker build -t barabulka-web:latest ./web
+
+      # Сборка образа бота
+      - name: Build bot image
+        run: |
+          docker build -t barabulka-bot:latest ./TG_bot
+
+      # Сохраняем оба образа в один архив
+      - name: Save images to tar
+        run: |
+          docker save barabulka-web:latest barabulka-bot:latest | gzip > images.tar.gz
+
+      # Подготавливаем docker-compose.prod.yml (заменяем build на image)
+      - name: Prepare production compose file
+        run: |
+          sed 's|build: ./TG_bot|image: barabulka-bot:latest|g' docker-compose.yml | \
+          sed 's|build: ./web|image: barabulka-web:latest|g' > docker-compose.prod.yml
+
+      # Копируем на VPS
+      - name: Copy files to VPS
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          source: "images.tar.gz,docker-compose.prod.yml"
+          target: ${{ secrets.VPS_PATH }}
+          strip_components: 0
+
+      # Развёртывание
+      - name: Deploy on VPS
+        uses: appleboy/ssh-action@v1.1.0
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            cd ${{ secrets.VPS_PATH }}
+            docker load < images.tar.gz
+            mv docker-compose.prod.yml docker-compose.yml
+            docker-compose down || true
+            docker-compose up -d
+            docker system prune -af

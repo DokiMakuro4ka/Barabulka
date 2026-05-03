@@ -14,12 +14,12 @@ jobs:
       # Сборка образа веб-приложения
       - name: Build web image
         run: |
-          docker build -t barabulka-web:latest ./web
+          docker build -t barabulka-web:latest ./project/web
 
       # Сборка образа бота
       - name: Build bot image
         run: |
-          docker build -t barabulka-bot:latest ./TG_bot
+          docker build -t barabulka-bot:latest ./project/TG_bot
 
       # Сохраняем оба образа в один архив
       - name: Save images to tar
@@ -29,8 +29,8 @@ jobs:
       # Подготавливаем docker-compose.prod.yml (заменяем build на image)
       - name: Prepare production compose file
         run: |
-          sed 's|build: ./TG_bot|image: barabulka-bot:latest|g' docker-compose.yml | \
-          sed 's|build: ./web|image: barabulka-web:latest|g' > docker-compose.prod.yml
+          sed 's|build: ./project/TG_bot|image: barabulka-bot:latest|g' docker-compose.yml | \
+          sed 's|build: ./project/web|image: barabulka-web:latest|g' > docker-compose.prod.yml
 
       # Копируем на VPS
       - name: Copy files to VPS

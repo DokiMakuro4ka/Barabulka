@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>{{ epoch[2] }}</h1>
+<p>{{ epoch[3] }}</p>
+<h2>Детали</h2>
+<ul>
+{% for detail in details %}
+    <li><a href="{{ url_for('epoch_detail', epoch_id=epoch[0], category=detail[2]) }}">{{ detail[2] }}</a></li>
+{% endfor %}
+</ul>
+<a href="{{ url_for('show_state', state_id=epoch[1]) }}">⬅️ Назад</a>
+{% endblock %}

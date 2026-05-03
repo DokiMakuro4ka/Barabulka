@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>⚔️ Бой с {{ monster.name }} (ур. {{ monster.level }})</h1>
+<p>❤️ Здоровье монстра: {{ monster.health }}/{{ monster.hp }}</p>
+<p>❤️ Твоё здоровье: {{ player_hp }}</p>
+{% if action_desc %}
+<p>Ты: {{ action_desc }}</p>
+<p>Монстр: {{ monster_desc }}</p>
+{% endif %}
+<form method="post" action="{{ url_for('battle_action') }}">
+    <button type="submit" name="action" value="attack">⚔️ Атаковать</button>
+    <button type="submit" name="action" value="defend">🛡️ Защищаться</button>
+    <button type="submit" name="action" value="flee">🏃 Убежать</button>
+</form>
+<a href="{{ url_for('index') }}">🚪 Сдаться и выйти в меню</a>
+{% endblock %}

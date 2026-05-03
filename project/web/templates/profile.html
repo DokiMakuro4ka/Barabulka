@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>Профиль</h1>
+<pre>{{ user_text }}</pre>
+<ul>
+    <li><a href="{{ url_for('delete_profile') }}" onclick="return confirm('Удалить профиль?')">🗑️ Удалить профиль</a></li>
+    <li><a href="{{ url_for('index') }}">🔙 Главное меню</a></li>
+</ul>
+{% endblock %}

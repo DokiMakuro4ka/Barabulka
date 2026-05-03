@@ -1,0 +1,52 @@
+services:
+  postgres:
+    image: postgres:15
+    container_name: rpg_postgres
+    restart: always
+    environment:
+      POSTGRES_HOST_AUTH_METHOD: trust
+      POSTGRES_DB: Barabulka
+      POSTGRES_USER: postgres
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  telegram_bot:
+    build: ./Bot
+    container_name: rpg_bot
+    restart: always
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      BOT_TOKEN: ${BOT_TOKEN}
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_USER: postgres
+      DB_PASSWORD: ""
+      DB_NAME: Barabulka
+
+  web:
+    build: ./web
+    container_name: rpg_web
+    restart: always
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      SECRET_KEY: ${SECRET_KEY}
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_USER: postgres
+      DB_PASSWORD: ""
+      DB_NAME: Barabulka
+    ports:
+      - "127.0.0.1:5000:5000"
+
+volumes:
+  postgres_data:

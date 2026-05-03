@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>Выберите класс</h1>
+<ul>
+    <li><a href="{{ url_for('select_class', class_id=1) }}">🧙 Маг</a></li>
+    <li><a href="{{ url_for('select_class', class_id=2) }}">🛡️ Рыцарь</a></li>
+    <li><a href="{{ url_for('select_class', class_id=3) }}">🏹 Лучник</a></li>
+    <li><a href="{{ url_for('select_class', class_id=4) }}">🗡️ Ассасин</a></li>
+</ul>
+<a href="{{ url_for('index') }}">⬅️ Назад</a>
+{% endblock %}

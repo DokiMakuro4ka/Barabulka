@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>{{ state[1] }}</h1>
+<p>{{ state[2] }}</p>
+<h2>Эпохи</h2>
+<ul>
+{% for epoch in epochs %}
+    <li><a href="{{ url_for('show_epoch', epoch_id=epoch[0]) }}">{{ epoch[2] }}</a></li>
+{% endfor %}
+</ul>
+<a href="{{ url_for('choose_state') }}">⬅️ Назад</a>
+{% endblock %}

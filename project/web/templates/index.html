@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>Главное меню</h1>
+<p>Добро пожаловать, {{ user[2] }} (уровень {{ user[3] }})</p>
+<ul>
+    <li><a href="{{ url_for('profile') }}">📊 Профиль</a></li>
+    <li><a href="{{ url_for('battle') }}">⚔️ Сражаться</a></li>
+    {% if not has_class %}
+    <li><a href="{{ url_for('choose_class') }}">📜 Выбрать класс</a></li>
+    {% endif %}
+    <li><a href="#">ℹ️ Помощь</a></li>
+</ul>
+{% endblock %}

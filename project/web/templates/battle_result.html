@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>{% if victory %}🏆 Победа!{% else %}💀 Поражение{% endif %}</h1>
+{% if victory %}
+<p>Ты победил! +{{ exp }} опыта, +{{ coins }} монет.</p>
+{% else %}
+<p>{{ message }}</p>
+{% endif %}
+<a href="{{ url_for('index') }}">🔙 В главное меню</a>
+{% endblock %}

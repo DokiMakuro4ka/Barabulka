@@ -1,0 +1,6 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>{{ detail[2] }}</h1>
+<p>{{ detail[3] }}</p>
+<a href="{{ url_for('show_epoch', epoch_id=epoch_id) }}">⬅️ Назад</a>
+{% endblock %}

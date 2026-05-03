@@ -6,12 +6,12 @@ from telebot.types import InlineKeyboardMarkup, InlineKeyboardButton
 from telebot.apihelper import ApiTelegramException
 from requests.exceptions import ConnectionError, Timeout, SSLError
 
-from TG_bot.config.settings import Config
-from TG_bot.DB.centre import (
+from config.settings import Config
+from DB.centre import (
     User, UserClass, UserSubclass, State, Epoch, EpochDetail, Monster, BattleLog
 )
-from TG_bot.Bot.Keyboard import reply
-from TG_bot.Bot.Keyboard import inline
+from Bot.Keyboard import reply
+from Bot.Keyboard import inline
 
 bot = TeleBot(Config.BOT_TOKEN)
 LAST_BOT_MESSAGES = {}

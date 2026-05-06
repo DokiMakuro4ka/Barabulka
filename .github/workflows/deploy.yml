@@ -11,6 +11,11 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      - name: List directory structure
+        run: |
+          ls -la project/
+          ls -la project/TG_bot/ || echo "TG_bot folder not found"
+
       # Сборка образа веб-приложения
       - name: Build web image
         run: |

@@ -11,19 +11,12 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: List directory structure
-        run: |
-          ls -la project/
-          ls -la project/TG_bot/ || echo "TG_bot folder not found"
-
-      - name: Check Dockerfile exists
-        run: |
-          ls -la project/TG_bot/Dockerfile
-
-      # Сборка образа веб-приложения
+      # Сборка образа веб-приложения (используем cd для чистоты)
       - name: Build web image
         run: |
-          docker build -t barabulka-web:latest ./project/web
+          cd project/web
+          docker build -t barabulka-web:latest .
+          cd ../..
 
       # Сборка образа бота
       - name: Build bot image
@@ -40,10 +33,26 @@ jobs:
       # Подготавливаем docker-compose.prod.yml (заменяем build на image)
       - name: Prepare production compose file
         run: |
-          sed 's|build: ./project/TG_bot|image: barabulka-bot:latest|g' ./project/docker-compose.yml | \
-          sed 's|build: ./project/web|image: barabulka-web:latest|g' > docker-compose.prod.yml
+          sed 's|build: ./TG_bot|image: barabulka-bot:latest|g' ./project/docker-compose.yml | \
+          sed 's|build: ./web|image: barabulka-web:latest|g' > docker-compose.prod.yml
 
-      # Копируем на VPS
+      # Очистка старой папки на VPS и копирование новых файлов
+      - name: Clean up old files and copy new ones to VPS
+        uses: appleboy/ssh-action@v1.1.0
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            cd ${{ secrets.VPS_PATH }}
+            # Останавливаем старые контейнеры (если есть)
+            docker-compose down || true
+            # Удаляем старые образы (оставляем volumes, чтобы не потерять данные)
+            docker system prune -af || true
+            # Удаляем старые файлы compose, архив и env (который мы заново создадим)
+            rm -f docker-compose.yml docker-compose.prod.yml images.tar.gz .env
+
+      # Копируем новые файлы на VPS (образы и compose)
       - name: Copy files to VPS
         uses: appleboy/scp-action@v0.1.7
         with:
@@ -53,8 +62,9 @@ jobs:
           source: "images.tar.gz,docker-compose.prod.yml"
           target: ${{ secrets.VPS_PATH }}
           strip_components: 0
+          overwrite: true
 
-      # Развёртывание
+      # Финальное развёртывание на VPS
       - name: Deploy on VPS
         uses: appleboy/ssh-action@v1.1.0
         with:
@@ -63,8 +73,28 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
             cd ${{ secrets.VPS_PATH }}
-            docker load < images.tar.gz
+            
+            # Переименовываем compose файл
             mv docker-compose.prod.yml docker-compose.yml
-            docker-compose down || true
+            
+            # Загружаем образы
+            docker load < images.tar.gz
+            
+            # Создаём файл .env (используем секреты GitHub)
+            cat > .env << EOF
+            BOT_TOKEN=${{ secrets.BOT_TOKEN }}
+            SECRET_KEY=${{ secrets.SECRET_KEY }}
+            EOF
+            
+            # Запускаем контейнеры
             docker-compose up -d
-            docker system prune -af
+            
+            # Небольшая пауза, чтобы контейнеры успели стартовать
+            sleep 5
+            
+            # Проверяем статус и выводим логи веба (для отладки)
+            docker-compose ps
+            echo "=== Logs for web ==="
+            docker-compose logs --tail=20 web || true
+            
+            echo "✅ Deployment finished"

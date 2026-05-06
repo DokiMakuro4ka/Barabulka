@@ -16,6 +16,10 @@ jobs:
           ls -la project/
           ls -la project/TG_bot/ || echo "TG_bot folder not found"
 
+      - name: Check Dockerfile exists
+        run: |
+          ls -la project/TG_bot/Dockerfile
+
       # Сборка образа веб-приложения
       - name: Build web image
         run: |
@@ -24,7 +28,9 @@ jobs:
       # Сборка образа бота
       - name: Build bot image
         run: |
-          docker build -t barabulka-bot:latest ./project/TG_bot
+          cd project/TG_bot
+          docker build -t barabulka-bot:latest .
+          cd ../..
 
       # Сохраняем оба образа в один архив
       - name: Save images to tar
